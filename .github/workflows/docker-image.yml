@@ -19,6 +19,9 @@ jobs:
       matrix:
         arch:
           - 'alpine'
+        profile:
+          - 'standard'
+          - 'demo_umami'
     steps:
     - uses: actions/checkout@v2
     -
@@ -44,4 +47,16 @@ jobs:
         platforms: linux/amd64,linux/arm64
         file: 'standard/Dockerfile'
         tags: 'davyinsa/docker-drupal:10'
-
+    -
+      name: Build and push Drupal profile ${{ matrix.profile }} installed!
+      id: docker_build_alpine_profile
+      if: ${{ matrix.arch  == 'alpine' }}
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        context: .
+        platforms: linux/amd64,linux/arm64
+        file: 'standard/Dockerfile-profile'
+        tags: 'davyinsa/docker-drupal:10-${{ matrix.profile }}'
+        build-args: |
+          PROFILE=${{ matrix.profile }}
