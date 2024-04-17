@@ -1,9 +1,10 @@
 FROM davyinsa/docker-nginx-php:8.2-alpine
 ENV DRUPAL_WEB_ROOT=web
-
+ENV PHP_ENABLE_SQLITE=TRUE
 COPY --from=drupal:10 /opt/drupal /var/www/html
 
 RUN apk add --no-cache sqlite && \
+    php-ext enable pdo_sqlite && \
     cd /var/www/html && \
     # rm -rf vendor && rm composer.lock && \
     composer install && \
@@ -15,4 +16,6 @@ RUN apk add --no-cache sqlite && \
     cp vendor/davyin/drupal_settings/assets/* web/sites/default/ && \
     cp web/sites/default/default.settings.php web/sites/default/settings.php && \
     chmod 777 web/sites/default/settings.php && \
-    composer drupal:scaffold -q
+    composer drupal:scaffold -q && \
+    mkdir -p web/sites/default/files && \
+    chmod -R 777 web/sites/default/files
