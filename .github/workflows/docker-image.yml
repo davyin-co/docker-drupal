@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        drupal_version:
+          - 10
+          - 11
         arch:
           - 'alpine'
         profile:
@@ -46,7 +49,9 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         file: 'standard/Dockerfile'
-        tags: 'davyinsa/docker-drupal:10'
+        tags: 'davyinsa/docker-drupal:${{ matrix.drupal_version }}'
+        build-args: |
+          DRUPAL_VERSION=${{ matrix.drupal_version }}
     -
       name: Build and push Drupal profile ${{ matrix.profile }} installed!
       id: docker_build_alpine_profile
@@ -57,6 +62,7 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         file: 'standard/Dockerfile-profile'
-        tags: 'davyinsa/docker-drupal:10-${{ matrix.profile }}'
+        tags: 'davyinsa/docker-drupal:${{ matrix.drupal_version }}-${{ matrix.profile }}'
         build-args: |
           PROFILE=${{ matrix.profile }}
+          DRUPAL_VERSION=${{ matrix.drupal_version }}
