@@ -1,11 +1,14 @@
 ARG DRUPAL_VERSION
+FROM drupal:${DRUPAL_VERSION} AS drupal_builder
+
 FROM davyinsa/docker-nginx-php:8.2-alpine
-ARG DRUPAL_VERSION
+
 ENV DRUPAL_WEB_ROOT=web
 ENV PHP_ENABLE_SQLITE=TRUE
 ENV PHP_FPM_PROCESS_MANAGER=ondemand
 ENV PHP_FPM_MAX_CHILDREN=5
-COPY --from=drupal:${DRUPAL_VERSION} /opt/drupal /var/www/html
+
+COPY --from=drupal_builder /opt/drupal /var/www/html
 
 RUN apk add --no-cache sqlite && \
     php-ext enable pdo_sqlite && \
