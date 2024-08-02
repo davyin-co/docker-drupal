@@ -19,6 +19,7 @@ jobs:
       matrix:
         drupal_version:
           - 10
+          - 11.0.0-rc1
         arch:
           - 'alpine'
         profile:

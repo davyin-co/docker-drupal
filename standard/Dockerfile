@@ -1,7 +1,7 @@
 ARG DRUPAL_VERSION
 FROM drupal:${DRUPAL_VERSION} AS drupal_builder
 
-FROM davyinsa/docker-nginx-php:8.2-alpine
+FROM davyinsa/docker-nginx-php:8.3-alpine
 
 ENV DRUPAL_WEB_ROOT=web
 ENV PHP_ENABLE_SQLITE=TRUE
@@ -18,7 +18,7 @@ RUN apk add --no-cache sqlite && \
     #mkdir -p ~/.config/fish/completions/ && ln -s ~/.console/drupal.fish ~/.config/fish/completions/drupal.fish && \
     chown nginx:www-data /var/www/html && \
     ## install drupal module
-    sed -i 's/"minimum-stability": "stable"/"minimum-stability": "dev"/g' composer.json && \
+    sed -i 's/"minimum-stability": ".*"/"minimum-stability": "dev"/g' composer.json && \
     composer require drush/drush drupal/admin_toolbar drupal/devel drupal/devel_php davyin/drupal_settings && \
     cp vendor/davyin/drupal_settings/assets/* web/sites/default/ && \
     cp web/sites/default/default.settings.php web/sites/default/settings.php && \
