@@ -1,5 +1,9 @@
 ARG PROFILE
 FROM davyinsa/docker-drupal:10
+ENV DRUPAL_WEB_ROOT=web
+ENV PHP_ENABLE_SQLITE=TRUE
+ENV PHP_FPM_PROCESS_MANAGER=ondemand
+ENV PHP_FPM_MAX_CHILDREN=5
 ARG PROFILE
 RUN sed -i "s/memory_limit = 128M/memory_limit = 1024M/g" /etc/php*/php.ini
 USER nginx
