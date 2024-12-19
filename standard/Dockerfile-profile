@@ -12,5 +12,7 @@ USER nginx
 RUN php -i && \
     drush site-install ${PROFILE} -y --account-pass=admin --db-url=sqlite://sites/default/files/.drupal.sqlite && \
     drush cr && \
-    drush pm:enable -y admin_toolbar_tools admin_toolbar_search admin_toolbar_links_access_filter
+    drush pm:enable -y admin_toolbar_tools admin_toolbar_search admin_toolbar_links_access_filter && \
+    curl http://localhost && \
+    chmod -R 777 web/sites/default/files
 USER root
