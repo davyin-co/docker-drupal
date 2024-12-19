@@ -9,10 +9,12 @@ ARG PROFILE
 RUN sed -i "s/memory_limit = 128M/memory_limit = 1024M/g" /etc/php*/php.ini
 USER nginx
 #VOLUME /data
+USER root
 RUN php -i && \
     drush site-install ${PROFILE} -y --account-pass=admin --db-url=sqlite://sites/default/files/.drupal.sqlite && \
     drush cr && \
     drush pm:enable -y admin_toolbar_tools admin_toolbar_search admin_toolbar_links_access_filter && \
     curl http://localhost && \
+    cd /var/www/html && \
     chmod -R 777 web/sites/default/files
 USER root
